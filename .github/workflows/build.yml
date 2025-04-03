@@ -25,22 +25,13 @@ jobs:
           fetch-depth: 0
           submodules: true
 
-      - name: Setup environment
+      - name: Make files executable
         run: |
-          # Make all necessary files executable
-          find bin -type f -exec chmod +x {} \;
           chmod +x build.sh
-          
-          # Verify file permissions
+          chmod +x bin/toml/tq-x86_64
+          chmod +x bin/htmlq/htmlq-x86_64
+          chmod +x bin/aapt2/aapt2-x86_64
           ls -la bin/toml/tq-x86_64
-          ls -la bin/htmlq/htmlq-x86_64
-          ls -la bin/aapt2/aapt2-x86_64
-          
-          # Verify config file exists
-          ls -la config.toml
-          
-          # Set PATH to include bin directory
-          echo "$(pwd)/bin" >> $GITHUB_PATH
 
       - name: Update config
         if: ${{ inputs.from_ci }}
