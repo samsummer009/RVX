@@ -25,12 +25,19 @@ jobs:
           fetch-depth: 0
           submodules: true
 
-      - name: Make build.sh executable
-        run: chmod +x build.sh
+      - name: Make files executable
+        run: |
+          chmod +x build.sh
+          chmod +x bin/toml/tq-x86_64
+          chmod +x bin/htmlq/htmlq-x86_64
+          chmod +x bin/aapt2/aapt2-x86_64
+          ls -la bin/toml/tq-x86_64
 
       - name: Update config
         if: ${{ inputs.from_ci }}
         run: |
+          pwd
+          ls -la
           if git checkout origin/update build.md; then
             UPDATE_CFG=$(./build.sh config.toml --config-update)
             if [ "$UPDATE_CFG" ]; then
