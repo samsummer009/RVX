@@ -30,7 +30,6 @@ jobs:
           chmod +x build.sh
           chmod +x bin/toml/tq-x86_64
           chmod +x bin/htmlq/htmlq-x86_64
-          chmod +x bin/aapt2/aapt2-x86_64
           ls -la bin/toml/tq-x86_64
 
       - name: Update config
