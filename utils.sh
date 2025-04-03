@@ -470,7 +470,10 @@ build_rv() {
 	local table=${args[table]}
 	local dl_from=${args[dl_from]}
 	local arch=${args[arch]}
-	local arch_f="${arch// /}"
+	local arch_f=""
+	if [ -n "$arch" ] && [ "$arch" != "all" ]; then
+		arch_f="(${arch// /})"
+	fi
 
 	local p_patcher_args=()
 	if [ "${args[excluded_patches]}" ]; then p_patcher_args+=("$(join_args "${args[excluded_patches]}" -d)"); fi
@@ -626,23 +629,11 @@ build_rv() {
 		fi
 		if [ "$build_mode" = apk ]; then
 			if [[ "$table" == *"YouTube-Music"* ]]; then
-				if [ -n "$arch" ]; then
-					local apk_output="${BUILD_DIR}/${app_name}-RVX-${version_f}(${arch_f}).apk"
-				else
-					local apk_output="${BUILD_DIR}/${app_name}-RVX-${version_f}.apk"
-				fi
+				local apk_output="${BUILD_DIR}/${app_name}-RVX-${version_f}${arch_f}.apk"
 			elif [[ "$table" == *"YouTube-Monet"* ]]; then
-				if [ -n "$arch" ]; then
-					local apk_output="${BUILD_DIR}/${app_name}-OG-Monet-RVX-${version_f}(${arch_f}).apk"
-				else
-					local apk_output="${BUILD_DIR}/${app_name}-OG-Monet-RVX-${version_f}.apk"
-				fi
+				local apk_output="${BUILD_DIR}/${app_name}-OG-Monet-RVX-${version_f}${arch_f}.apk"
 			else
-				if [ -n "$arch" ]; then
-					local apk_output="${BUILD_DIR}/${app_name}-OG-RVX-${version_f}(${arch_f}).apk"
-				else
-					local apk_output="${BUILD_DIR}/${app_name}-OG-RVX-${version_f}.apk"
-				fi
+				local apk_output="${BUILD_DIR}/${app_name}-OG-RVX-${version_f}${arch_f}.apk"
 			fi
 			mv -f "$patched_apk" "$apk_output"
 			pr "Built ${table} (non-root): '${apk_output}'"
@@ -665,23 +656,11 @@ build_rv() {
 			"$base_template"
 
 		if [[ "$table" == *"YouTube-Music"* ]]; then
-			if [ -n "$arch" ]; then
-				local module_output="${app_name}-RVX-${version_f}(${arch_f}).zip"
-			else
-				local module_output="${app_name}-RVX-${version_f}.zip"
-			fi
+			local module_output="${app_name}-RVX-${version_f}${arch_f}.zip"
 		elif [[ "$table" == *"YouTube-Monet"* ]]; then
-			if [ -n "$arch" ]; then
-				local module_output="${app_name}-OG-Monet-RVX-${version_f}(${arch_f}).zip"
-			else
-				local module_output="${app_name}-OG-Monet-RVX-${version_f}.zip"
-			fi
+			local module_output="${app_name}-OG-Monet-RVX-${version_f}${arch_f}.zip"
 		else
-			if [ -n "$arch" ]; then
-				local module_output="${app_name}-OG-RVX-${version_f}(${arch_f}).zip"
-			else
-				local module_output="${app_name}-OG-RVX-${version_f}.zip"
-			fi
+			local module_output="${app_name}-OG-RVX-${version_f}${arch_f}.zip"
 		fi
 		pr "Packing module ${table}"
 		cp -f "$patched_apk" "${base_template}/base.apk"
