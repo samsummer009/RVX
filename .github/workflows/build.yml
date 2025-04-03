@@ -25,6 +25,9 @@ jobs:
           fetch-depth: 0
           submodules: true
 
+      - name: Make build.sh executable
+        run: chmod +x build.sh
+
       - name: Update config
         if: ${{ inputs.from_ci }}
         run: |
