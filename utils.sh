@@ -474,10 +474,10 @@ build_rv() {
 	if [ -n "$arch" ] && [ "$arch" != "all" ]; then
 		if [[ "$arch" == *" "* ]]; then
 			# Multiple architectures specified
-			arch_f="(${arch// /})"
+			arch_f="-(${arch// /})"
 		else
 			# Single architecture
-			arch_f="(${arch})"
+			arch_f="-(${arch})"
 		fi
 	fi
 
@@ -539,7 +539,7 @@ build_rv() {
 	pr "Choosing version '${version}' for ${table}"
 	local version_f=${version// /}
 	version_f=${version_f#v}
-	local stock_apk="${TEMP_DIR}/${pkg_name}-${version_f}-${arch_f}.apk"
+	local stock_apk="${TEMP_DIR}/${pkg_name}-${version_f}${arch_f}.apk"
 	
 	# Check if we already have the required version downloaded
 	if [ -f "$stock_apk" ]; then
@@ -548,7 +548,7 @@ build_rv() {
 		# Try to find any existing APK with the same package name and architecture
 		local existing_apk=$(find "$TEMP_DIR" -name "${pkg_name}-*-${arch_f}.apk" | head -1)
 		if [ -n "$existing_apk" ]; then
-			local existing_version=$(basename "$existing_apk" | sed "s/${pkg_name}-\(.*\)-${arch_f}.apk/\1/")
+			local existing_version=$(basename "$existing_apk" | sed "s/${pkg_name}-\(.*\)${arch_f}.apk/\1/")
 			if [ "$existing_version" = "$version_f" ]; then
 				pr "Found matching APK, reusing it"
 				cp "$existing_apk" "$stock_apk"
