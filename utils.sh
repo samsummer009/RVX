@@ -474,10 +474,10 @@ build_rv() {
 	if [ -n "$arch" ] && [ "$arch" != "all" ]; then
 		if [[ "$arch" == *" "* ]]; then
 			# Multiple architectures specified
-			arch_f="(${arch// /})"
+			arch_f="-(${arch// /})"
 		else
 			# Single architecture
-			arch_f="(${arch})"
+			arch_f="-(${arch})"
 		fi
 	fi
 
@@ -635,7 +635,7 @@ build_rv() {
 		fi
 		if [ "$build_mode" = apk ]; then
 			if [[ "$table" == *"YouTube-Music"* ]]; then
-				local apk_output="${BUILD_DIR}/${app_name}-RVX-${version_f}-${arch_f}.apk"
+				local apk_output="${BUILD_DIR}/${app_name}-RVX-${version_f}${arch_f}.apk"
 			elif [[ "$table" == *"YouTube-Monet"* ]]; then
 				local apk_output="${BUILD_DIR}/YouTube-OG-Monet-RVX-${version_f}${arch_f}.apk"
 			else
@@ -662,7 +662,7 @@ build_rv() {
 			"$base_template"
 
 		if [[ "$table" == *"YouTube-Music"* ]]; then
-			local module_output="${app_name}-RVX-${version_f}-${arch_f}.zip"
+			local module_output="${app_name}-RVX-${version_f}${arch_f}.zip"
 		elif [[ "$table" == *"YouTube-Monet"* ]]; then
 			local module_output="YouTube-OG-Monet-RVX-${version_f}${arch_f}.zip"
 		else
