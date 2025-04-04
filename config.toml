@@ -2,8 +2,8 @@ enable-magisk-update = true
 parallel-jobs = 1
 
 # ReVanced Extended
-[YouTube-Extended]
-enabled = false
+[YouTube-RVX]
+# enabled = false
 app-name = "YouTube"
 apkmirror-dlurl = "https://apkmirror.com/apk/google-inc/youtube/"
 # archive-dlurl = "https://archive.org/download/jhc-apks/apks/com.google.android.youtube"
@@ -20,8 +20,7 @@ patcher-args = "--legacy-options=patch-options.json"
 
 
 # ReVanced Extended
-[YouTube-Monet-Extended]
-enabled = false
+[YouTube-Monet-RVX]
 app-name = "YouTube-Monet"
 apkmirror-dlurl = "https://apkmirror.com/apk/google-inc/youtube/"
 # archive-dlurl = "https://archive.org/download/jhc-apks/apks/com.google.android.youtube"
@@ -38,8 +37,8 @@ patcher-args = "--legacy-options=patch-options.json"
 
 
 # ReVanced Extended
-[YouTube-Music-Extended]
-# enabled = false
+[YouTube-Music-RVX]
+# # enabled = false
 app-name = "YouTube-Music"
 apkmirror-dlurl = "https://apkmirror.com/apk/google-inc/youtube-music/"
 # archive-dlurl = "https://archive.org/download/jhc-apks/apks/com.google.android.apps.youtube.music"
@@ -57,8 +56,8 @@ patcher-args = "--legacy-options=patch-options-music.json"
 
 
 # ReVanced Extended
-[YouTube-Music-Monet-Extended]
-enabled = false
+[YouTube-Music-Monet-RVX]
+# enabled = false
 app-name = "YouTube-Music-Monet"
 apkmirror-dlurl = "https://apkmirror.com/apk/google-inc/youtube-music/"
 # archive-dlurl = "https://archive.org/download/jhc-apks/apks/com.google.android.apps.youtube.music"
