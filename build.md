@@ -1,4 +1,3 @@
-YouTube-Monet-Extended: 20.13.37  
 YouTube-Music-Extended (arm64-v8a): 8.13.51  
 YouTube-Music-Extended (arm-v7a): 8.13.51  
 
