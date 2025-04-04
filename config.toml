@@ -39,7 +39,7 @@ patcher-args = "--legacy-options=patch-options.json"
 
 # ReVanced Extended
 [YouTube-Music-Extended]
-# enabled = false
+# # enabled = false
 app-name = "YouTube-Music"
 apkmirror-dlurl = "https://apkmirror.com/apk/google-inc/youtube-music/"
 # archive-dlurl = "https://archive.org/download/jhc-apks/apks/com.google.android.apps.youtube.music"
