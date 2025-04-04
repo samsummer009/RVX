@@ -14,8 +14,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Make build.sh executable
-        run: chmod +x build.sh
+      - name: Make files executable
+        run: |
+          chmod +x build.sh
+          chmod +x bin/toml/tq-x86_64
+          chmod +x bin/htmlq/htmlq-x86_64
+          ls -la bin/toml/tq-x86_64
+          pwd
+          ls -la
 
       - name: Should build?
         id: should_build
