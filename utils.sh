@@ -539,7 +539,7 @@ build_rv() {
 	pr "Choosing version '${version}' for ${table}"
 	local version_f=${version// /}
 	version_f=${version_f#v}
-	local stock_apk="${TEMP_DIR}/${pkg_name}-${version_f}${arch_f}.apk"
+	local stock_apk="${TEMP_DIR}/${pkg_name}-${version_f}-${arch_f}.apk"
 	
 	# Check if we already have the required version downloaded
 	if [ -f "$stock_apk" ]; then
@@ -548,7 +548,7 @@ build_rv() {
 		# Try to find any existing APK with the same package name and architecture
 		local existing_apk=$(find "$TEMP_DIR" -name "${pkg_name}-*-${arch_f}.apk" | head -1)
 		if [ -n "$existing_apk" ]; then
-			local existing_version=$(basename "$existing_apk" | sed "s/${pkg_name}-\(.*\)${arch_f}.apk/\1/")
+			local existing_version=$(basename "$existing_apk" | sed "s/${pkg_name}-\(.*\)-${arch_f}.apk/\1/")
 			if [ "$existing_version" = "$version_f" ]; then
 				pr "Found matching APK, reusing it"
 				cp "$existing_apk" "$stock_apk"
@@ -635,7 +635,7 @@ build_rv() {
 		fi
 		if [ "$build_mode" = apk ]; then
 			if [[ "$table" == *"YouTube-Music"* ]]; then
-				local apk_output="${BUILD_DIR}/${app_name}-RVX-${version_f}${arch_f}.apk"
+				local apk_output="${BUILD_DIR}/${app_name}-RVX-${version_f}-${arch_f}.apk"
 			elif [[ "$table" == *"YouTube-Monet"* ]]; then
 				local apk_output="${BUILD_DIR}/YouTube-OG-Monet-RVX-${version_f}${arch_f}.apk"
 			else
@@ -662,7 +662,7 @@ build_rv() {
 			"$base_template"
 
 		if [[ "$table" == *"YouTube-Music"* ]]; then
-			local module_output="${app_name}-RVX-${version_f}${arch_f}.zip"
+			local module_output="${app_name}-RVX-${version_f}-${arch_f}.zip"
 		elif [[ "$table" == *"YouTube-Monet"* ]]; then
 			local module_output="YouTube-OG-Monet-RVX-${version_f}${arch_f}.zip"
 		else
