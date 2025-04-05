@@ -474,10 +474,10 @@ build_rv() {
 	if [ -n "$arch" ] && [ "$arch" != "all" ]; then
 		if [[ "$arch" == *" "* ]]; then
 			# Multiple architectures specified
-			arch_f="(${arch// /})"
+			arch_f="-(${arch// /})"
 		else
 			# Single architecture
-			arch_f="(${arch})"
+			arch_f="-(${arch})"
 		fi
 	fi
 
