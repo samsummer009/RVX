@@ -64,13 +64,18 @@ jobs:
         run: |
           cd build
           for file in *.apk *.zip; do
-            if [[ "$file" == *"YouTube-Music"* ]]; then
-              new_name=$(echo "$file" | sed 's/YouTube-Music-RVX-\([0-9.]*\)-\(arm64-v8a\|arm-v7a\)/YouTube-Music-RVX-\1-(\2)/')
+            if [[ "$file" == *"YouTube-Music-Monet"* ]]; then
+              new_name=$(echo "$file" | sed 's/YouTube-Music-Monet-RVX-\([0-9.]*\)\.\(arm64-v8a\|arm-v7a\)/YouTube-Music-Monet-RVX-\1-(\2)/')
+              if [ "$file" != "$new_name" ]; then
+                mv "$file" "$new_name"
+              fi
+            elif [[ "$file" == *"YouTube-Music"* ]]; then
+              new_name=$(echo "$file" | sed 's/YouTube-Music-RVX-\([0-9.]*\)\.\(arm64-v8a\|arm-v7a\)/YouTube-Music-RVX-\1-(\2)/')
               if [ "$file" != "$new_name" ]; then
                 mv "$file" "$new_name"
               fi
             elif [[ "$file" == *"YouTube-OG-Monet"* ]]; then
-              new_name=$(echo "$file" | sed 's/YouTube-OG-Monet-RVX-\([0-9.]*\)-\(arm64-v8a\|arm-v7a\)/YouTube-OG-Monet-RVX-\1-(\2)/')
+              new_name=$(echo "$file" | sed 's/YouTube-OG-Monet-RVX-\([0-9.]*\)\.\(arm64-v8a\|arm-v7a\)/YouTube-OG-Monet-RVX-\1-(\2)/')
               if [ "$file" != "$new_name" ]; then
                 mv "$file" "$new_name"
               fi
