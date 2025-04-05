@@ -41,8 +41,8 @@ You can easily update the ReVanced apps from this builder by using [Obtainium](h
 peternmuller's personally likes YouTube and YouTube Music applications to be as close as possible to the original look, but less cluttered, easier and less annoying to use. If this is also the case for you, I highly recommend importing [peternmuller's custom settings files](https://github.com/peternmuller/revanced-builder/tree/main/custom-settings).
 - I have customized the patch options to better suit my preferences and requirements.
 For my own testing, I've customized a few things in the APKs to suit my personal preferences. If you want to customize the patches for your own needs, you can check the patch options files:
-- [patch-options.json](https://github.com/Obasu/RVX/blob/main/patch-options.json) for YouTube
-- [patch-options-music.json](https://github.com/Obasu/RVX/blob/main/patch-options-music.json) for YouTube Music
+- [patch-options.json](https://github.com/samsummer009/RVX/blob/main/patch-options.json) for YouTube
+- [patch-options-music.json](https://github.com/samsummer009/RVX/blob/main/patch-options-music.json) for YouTube Music
 
 **To do this, go to YouTube Settings &rarr; ReVanced (or ReVanced Extended) &rarr; Miscellaneous (or Advanced Settings for YouTube Music) &rarr; Import&nbsp;/&nbsp;Export settings.**
 
