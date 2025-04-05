@@ -1,4 +1,3 @@
-YouTube-Monet-RVX: 20.13.37  
 YouTube-Music-RVX (arm64-v8a): 8.13.51  
 YouTube-Music-RVX (arm-v7a): 8.13.51  
 
