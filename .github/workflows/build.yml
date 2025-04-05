@@ -60,17 +60,6 @@ jobs:
           GITHUB_REPOSITORY: $GITHUB_REPOSITORY
           NEXT_VER_CODE: ${{ steps.next_ver_code.outputs.NEXT_VER_CODE }}
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-
-      - name: Rename build files
-        run: python rename_files.py
-
-      - name: List build files after renaming
-        run: ls -la build/
-
       - name: Get output
         id: get_output
         run: |
@@ -85,7 +74,7 @@ jobs:
         with:
           body: ${{ steps.get_output.outputs.BUILD_LOG }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: build/*.zip build/*.apk
+          file: ./build/*
           release_name: ReVanced ExTended
           tag: ${{ steps.next_ver_code.outputs.NEXT_VER_CODE }}
           file_glob: true
