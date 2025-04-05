@@ -68,6 +68,9 @@ jobs:
       - name: Rename build files
         run: python rename_files.py
 
+      - name: List build files after renaming
+        run: ls -la build/
+
       - name: Get output
         id: get_output
         run: |
@@ -80,12 +83,13 @@ jobs:
       - name: Upload modules to release
         uses: svenstaro/upload-release-action@v2
         with:
+          body: ${{ steps.get_output.outputs.BUILD_LOG }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: build/*
+          release_name: ReVanced ExTended
           tag: ${{ steps.next_ver_code.outputs.NEXT_VER_CODE }}
           file_glob: true
-          prerelease: true
-          body: "Automated build"
+          overwrite: true
 
       - name: Update changelog and Magisk update json
         id: update_config

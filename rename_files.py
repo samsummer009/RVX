@@ -9,17 +9,31 @@ def rename_files():
 
     # Regular expressions for matching file names
     music_pattern = re.compile(r'YouTube-Music-RVX-(\d+\.\d+\.\d+)\.([^.]+)\.([^.]+)')
+    music_module_pattern = re.compile(r'YouTube-Music-RVX-(\d+\.\d+\.\d+)\.([^.]+)\.zip')
 
     for filename in os.listdir(build_dir):
         filepath = os.path.join(build_dir, filename)
         if not os.path.isfile(filepath):
             continue
 
-        # Handle YouTube Music files
+        # Handle YouTube Music APK files
         music_match = music_pattern.match(filename)
         if music_match:
             version, arch, ext = music_match.groups()
             new_name = f"YouTube-Music-RVX-{version}-({arch}).{ext}"
+            new_path = os.path.join(build_dir, new_name)
+            
+            try:
+                os.rename(filepath, new_path)
+                print(f"Renamed: {filename} -> {new_name}")
+            except Exception as e:
+                print(f"Error renaming {filename}: {e}")
+        
+        # Handle YouTube Music module files
+        music_module_match = music_module_pattern.match(filename)
+        if music_module_match:
+            version, arch = music_module_match.groups()
+            new_name = f"YouTube-Music-RVX-{version}-({arch}).zip"
             new_path = os.path.join(build_dir, new_name)
             
             try:
