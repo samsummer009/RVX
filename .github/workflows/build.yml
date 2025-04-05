@@ -60,6 +60,24 @@ jobs:
           GITHUB_REPOSITORY: $GITHUB_REPOSITORY
           NEXT_VER_CODE: ${{ steps.next_ver_code.outputs.NEXT_VER_CODE }}
 
+      - name: Rename files according to requirements
+        run: |
+          cd build
+          for file in *.apk *.zip; do
+            if [[ "$file" == *"YouTube-Music"* ]]; then
+              new_name=$(echo "$file" | sed 's/YouTube-Music-RVX-\([0-9.]*\)-\(arm64-v8a\|arm-v7a\)/YouTube-Music-RVX-\1-(\2)/')
+              if [ "$file" != "$new_name" ]; then
+                mv "$file" "$new_name"
+              fi
+            elif [[ "$file" == *"YouTube-OG-Monet"* ]]; then
+              new_name=$(echo "$file" | sed 's/YouTube-OG-Monet-RVX-\([0-9.]*\)-\(arm64-v8a\|arm-v7a\)/YouTube-OG-Monet-RVX-\1-(\2)/')
+              if [ "$file" != "$new_name" ]; then
+                mv "$file" "$new_name"
+              fi
+            fi
+          done
+          cd ..
+
       - name: Get output
         id: get_output
         run: |
