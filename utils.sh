@@ -418,7 +418,23 @@ dl_uptodown() {
 	fi
 	local data_url
 	data_url=$($HTMLQ "#detail-download-button" --attribute data-url <<<"$resp") || return 1
-	req "https://dw.uptodown.com/dwn/${data_url}" "$output"
+	
+	# Check if this might be a bundle
+	local might_be_bundle=false
+	if [[ "$data_url" == *"bundle"* ]] || [[ "$data_url" == *"apkm"* ]]; then
+		might_be_bundle=true
+	fi
+	
+	if [ $might_be_bundle = true ]; then
+		req "https://dw.uptodown.com/dwn/${data_url}" "$output.apkm" || return 1
+		if grep -qF "AndroidManifest.xml" <<<$(unzip -l "$output.apkm"); then
+			mv -f "${output}.apkm" "${output}"
+		else
+			merge_splits "${output}.apkm" "${output}"
+		fi
+	else
+		req "https://dw.uptodown.com/dwn/${data_url}" "$output"
+	fi
 }
 get_uptodown_pkg_name() { $HTMLQ --text "tr.full:nth-child(1) > td:nth-child(3)" <<<"$__UPTODOWN_RESP_PKG__"; }
 
@@ -593,19 +609,19 @@ build_rv() {
 		pr "Building '${table}' in '$build_mode' mode"
 		if [ -n "$microg_patch" ]; then
 			if [[ "$table" == *"YouTube-Music"* ]]; then
-				patched_apk="${TEMP_DIR}/${app_name}-RVX-${version_f}-(${arch})-temporary-files.apk"
+				patched_apk="${TEMP_DIR}/${app_name}-RVX-${version_f}-${build_mode}-temporary-files.apk"
 			elif [[ "$table" == *"YouTube-Monet"* ]]; then
-				patched_apk="${TEMP_DIR}/${app_name}-OG-Monet-RVX-${version_f}-(${arch})-temporary-files.apk"
+				patched_apk="${TEMP_DIR}/${app_name}-OG-Monet-RVX-${version_f}-${build_mode}-temporary-files.apk"
 			else
-				patched_apk="${TEMP_DIR}/${app_name}-OG-RVX-${version_f}-(${arch})-temporary-files.apk"
+				patched_apk="${TEMP_DIR}/${app_name}-OG-RVX-${version_f}-${build_mode}-temporary-files.apk"
 			fi
 		else
 			if [[ "$table" == *"YouTube-Music"* ]]; then
-				patched_apk="${TEMP_DIR}/${app_name}-RVX-${version_f}-(${arch})-temporary-files.apk"
+				patched_apk="${TEMP_DIR}/${app_name}-RVX-${version_f}-temporary-files.apk"
 			elif [[ "$table" == *"YouTube-Monet"* ]]; then
-				patched_apk="${TEMP_DIR}/${app_name}-OG-Monet-RVX-${version_f}-(${arch})-temporary-files.apk"
+				patched_apk="${TEMP_DIR}/${app_name}-OG-Monet-RVX-${version_f}-temporary-files.apk"
 			else
-				patched_apk="${TEMP_DIR}/${app_name}-OG-RVX-${version_f}-(${arch})-temporary-files.apk"
+				patched_apk="${TEMP_DIR}/${app_name}-OG-RVX-${version_f}-temporary-files.apk"
 			fi
 		fi
 		if [ -n "$microg_patch" ]; then
@@ -635,7 +651,7 @@ build_rv() {
 		fi
 		if [ "$build_mode" = apk ]; then
 			if [[ "$table" == *"YouTube-Music"* ]]; then
-				local apk_output="${BUILD_DIR}/${app_name}-RVX-${version_f}-(${arch}).apk"
+				local apk_output="${BUILD_DIR}/${app_name}-RVX-${version_f}-${arch_f}.apk"
 			elif [[ "$table" == *"YouTube-Monet"* ]]; then
 				local apk_output="${BUILD_DIR}/YouTube-OG-Monet-RVX-${version_f}${arch_f}.apk"
 			else
@@ -662,7 +678,7 @@ build_rv() {
 			"$base_template"
 
 		if [[ "$table" == *"YouTube-Music"* ]]; then
-			local module_output="${app_name}-RVX-${version_f}-(${arch}).zip"
+			local module_output="${app_name}-RVX-${version_f}-${arch_f}.zip"
 		elif [[ "$table" == *"YouTube-Monet"* ]]; then
 			local module_output="YouTube-OG-Monet-RVX-${version_f}${arch_f}.zip"
 		else

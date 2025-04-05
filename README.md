@@ -38,19 +38,23 @@ You can easily update the ReVanced apps from this builder by using [Obtainium](h
 > - YouTube Music ReVanced anddea: `yt-music-revanced-anddea`
 
 ## Import custom settings in ReVanced applications
-I personally like my YouTube and YouTube Music applications to be as close as possible to the original look, but less cluttered, easier and less annoying to use. If this is also the case for you, I highly recommend importing [my custom settings files](https://github.com/peternmuller/revanced-builder/tree/main/custom-settings).
+peternmuller's personally likes YouTube and YouTube Music applications to be as close as possible to the original look, but less cluttered, easier and less annoying to use. If this is also the case for you, I highly recommend importing [peternmuller's custom settings files](https://github.com/peternmuller/revanced-builder/tree/main/custom-settings).
+
+For my own testing, I've customized a few things in the APKs to suit my personal preferences. If you want to customize the patches for your own needs, you can check the patch options files:
+- [patch-options.json](https://github.com/Obasu/RVX/blob/main/patch-options.json) for YouTube
+- [patch-options-music.json](https://github.com/Obasu/RVX/blob/main/patch-options-music.json) for YouTube Music
 
 **To do this, go to YouTube Settings &rarr; ReVanced (or ReVanced Extended) &rarr; Miscellaneous (or Advanced Settings for YouTube Music) &rarr; Import&nbsp;/&nbsp;Export settings.**
 
 ## Building Locally
 ### On Termux
 ```bash
-bash <(curl -sSf https://raw.githubusercontent.com/peternmuller/revanced-builder/main/build-termux.sh)
+bash <(curl -sSf https://raw.githubusercontent.com/Obasu/RVX/main/build-termux.sh)
 ```
 ### On Desktop
 ```bash
-git clone https://github.com/peternmuller/revanced-builder
-cd revanced-builder
+git clone https://github.com/Obasu/RVX
+cd RVX
 ./build.sh
 ```
 
@@ -58,6 +62,8 @@ cd revanced-builder
 - [j-hc](https://github.com/j-hc) for creating this amazing builder.
 - [Kevinr99089](https://github.com/kevinr99089) for providing assistance with the builder.
 - [KitsunedFox](https://github.com/KitsunedFox) for the idea of the Obtainium tutorial.
+- [peternmuller](https://github.com/peternmuller) for maintaining and improving this builder.
+- I have customized the patch options to better suit my preferences and requirements.
 - And of course, the [ReVanced](https://github.com/ReVanced) team, [inotia00](https://github.com/inotia00) and [anddea](https://github.com/anddea) for their work on the ReVanced apps!
 
 ## License
