@@ -8,14 +8,16 @@ def rename_files():
         return
 
     # Regular expressions for matching file names
-    # Match format: YouTube-Music-RVX-8.13.51-.arm64-v8a.zip
-    music_pattern = re.compile(r'YouTube-Music-RVX-(\d+\.\d+\.\d+)\.([^.]+)\.(apk|zip)')
+    # Match format: YouTube-Music-RVX-8.13.51-(arm64-v8a).zip
+    music_pattern = re.compile(r'YouTube-Music-RVX-(\d+\.\d+\.\d+)-\(([^)]+)\)\.(apk|zip)')
 
+    print("Checking files in build directory...")
     for filename in os.listdir(build_dir):
         filepath = os.path.join(build_dir, filename)
         if not os.path.isfile(filepath):
             continue
 
+        print(f"Checking file: {filename}")
         # Handle YouTube Music files
         music_match = music_pattern.match(filename)
         if music_match:
@@ -24,10 +26,15 @@ def rename_files():
             new_path = os.path.join(build_dir, new_name)
             
             try:
-                os.rename(filepath, new_path)
-                print(f"Renamed: {filename} -> {new_name}")
+                if filepath != new_path:
+                    os.rename(filepath, new_path)
+                    print(f"Renamed: {filename} -> {new_name}")
+                else:
+                    print(f"File already has correct name: {filename}")
             except Exception as e:
                 print(f"Error renaming {filename}: {e}")
+        else:
+            print(f"No match for pattern: {filename}")
 
 if __name__ == "__main__":
     rename_files() 
