@@ -474,10 +474,10 @@ build_rv() {
 	if [ -n "$arch" ] && [ "$arch" != "all" ]; then
 		if [[ "$arch" == *" "* ]]; then
 			# Multiple architectures specified
-			arch_f="-(${arch// /})"
+			arch_f="(${arch// /})"
 		else
 			# Single architecture
-			arch_f="-(${arch})"
+			arch_f="(${arch})"
 		fi
 	fi
 
@@ -593,19 +593,19 @@ build_rv() {
 		pr "Building '${table}' in '$build_mode' mode"
 		if [ -n "$microg_patch" ]; then
 			if [[ "$table" == *"YouTube-Music"* ]]; then
-				patched_apk="${TEMP_DIR}/${app_name}-RVX-${version_f}-${build_mode}-temporary-files.apk"
+				patched_apk="${TEMP_DIR}/${app_name}-RVX-${version_f}-(${arch})-temporary-files.apk"
 			elif [[ "$table" == *"YouTube-Monet"* ]]; then
-				patched_apk="${TEMP_DIR}/${app_name}-OG-Monet-RVX-${version_f}-${build_mode}-temporary-files.apk"
+				patched_apk="${TEMP_DIR}/${app_name}-OG-Monet-RVX-${version_f}-(${arch})-temporary-files.apk"
 			else
-				patched_apk="${TEMP_DIR}/${app_name}-OG-RVX-${version_f}-${build_mode}-temporary-files.apk"
+				patched_apk="${TEMP_DIR}/${app_name}-OG-RVX-${version_f}-(${arch})-temporary-files.apk"
 			fi
 		else
 			if [[ "$table" == *"YouTube-Music"* ]]; then
-				patched_apk="${TEMP_DIR}/${app_name}-RVX-${version_f}-temporary-files.apk"
+				patched_apk="${TEMP_DIR}/${app_name}-RVX-${version_f}-(${arch})-temporary-files.apk"
 			elif [[ "$table" == *"YouTube-Monet"* ]]; then
-				patched_apk="${TEMP_DIR}/${app_name}-OG-Monet-RVX-${version_f}-temporary-files.apk"
+				patched_apk="${TEMP_DIR}/${app_name}-OG-Monet-RVX-${version_f}-(${arch})-temporary-files.apk"
 			else
-				patched_apk="${TEMP_DIR}/${app_name}-OG-RVX-${version_f}-temporary-files.apk"
+				patched_apk="${TEMP_DIR}/${app_name}-OG-RVX-${version_f}-(${arch})-temporary-files.apk"
 			fi
 		fi
 		if [ -n "$microg_patch" ]; then
@@ -635,7 +635,7 @@ build_rv() {
 		fi
 		if [ "$build_mode" = apk ]; then
 			if [[ "$table" == *"YouTube-Music"* ]]; then
-				local apk_output="${BUILD_DIR}/${app_name}-RVX-${version_f}${arch_f}.apk"
+				local apk_output="${BUILD_DIR}/${app_name}-RVX-${version_f}-(${arch}).apk"
 			elif [[ "$table" == *"YouTube-Monet"* ]]; then
 				local apk_output="${BUILD_DIR}/YouTube-OG-Monet-RVX-${version_f}${arch_f}.apk"
 			else
@@ -662,7 +662,7 @@ build_rv() {
 			"$base_template"
 
 		if [[ "$table" == *"YouTube-Music"* ]]; then
-			local module_output="${app_name}-RVX-${version_f}${arch_f}.zip"
+			local module_output="${app_name}-RVX-${version_f}-(${arch}).zip"
 		elif [[ "$table" == *"YouTube-Monet"* ]]; then
 			local module_output="YouTube-OG-Monet-RVX-${version_f}${arch_f}.zip"
 		else
