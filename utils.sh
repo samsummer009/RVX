@@ -229,8 +229,29 @@ config_update() {
 				__AAV__="true"
 			fi
 			
-			local pkgvers=$(get_"${dl_from}"_vers)
-			local latest_version=$(get_highest_ver <<<"$pkgvers") || latest_version=$(head -1 <<<"$pkgvers")
+			local pkgvers=""
+			# Safely get version info with error handling
+			if ! pkgvers=$(get_"${dl_from}"_vers 2>/dev/null); then
+				pr "Error getting versions for ${table_name}, skipping"
+				continue
+			fi
+
+			# Skip if empty version list
+			if [ -z "$pkgvers" ]; then
+				pr "No versions found for ${table_name}, skipping"
+				continue
+			fi
+			
+			local latest_version=""
+			if ! latest_version=$(get_highest_ver <<<"$pkgvers" 2>/dev/null); then
+				latest_version=$(head -1 <<<"$pkgvers" 2>/dev/null || echo "")
+			fi
+			
+			# Skip if we couldn't determine a version
+			if [ -z "$latest_version" ]; then
+				pr "Could not determine latest version for ${table_name}, skipping"
+				continue
+			fi
 			
 			# Skip if this is a beta/alpha version (unless beta mode is enabled)
 			if [ "$__AAV__" = "false" ] && [[ "$latest_version" =~ [Bb]eta|[Aa]lpha ]]; then
@@ -258,16 +279,27 @@ config_update() {
 			if [ -n "$query" ]; then query+=" or "; fi
 			query+=".key == \"$table\""
 		done
-		jq "to_entries | map(select(${query} or (.value | type != \"object\"))) | from_entries" <<<"$__TOML__"
+		# Ensure we always output valid JSON
+		if [ -n "$query" ]; then
+			jq "to_entries | map(select(${query} or (.value | type != \"object\"))) | from_entries" <<<"$__TOML__"
+		else
+			# Return empty JSON object if no updates
+			echo "{}"
+		fi
+	else
+		# Return empty JSON object when no changes
+		echo "{}"
 	fi
 }
 
 _req() {
 	local ip="$1" op="$2"
 	shift 2
+	# Ensure the URL is properly encoded
+	local safe_ip=$(echo "$ip" | sed 's/ /%20/g')
 	if [ "$op" = - ]; then
-		if ! curl -L -c "$TEMP_DIR/cookie.txt" -b "$TEMP_DIR/cookie.txt" --connect-timeout 5 --retry 0 --fail -s -S "$@" "$ip"; then
-			epr "Request failed: $ip"
+		if ! curl -L -c "$TEMP_DIR/cookie.txt" -b "$TEMP_DIR/cookie.txt" --connect-timeout 5 --retry 0 --fail -s -S "$@" "$safe_ip"; then
+			epr "Request failed: $safe_ip"
 			return 1
 		fi
 	else
@@ -278,8 +310,8 @@ _req() {
 			while [ -f "$dlp" ]; do sleep 1; done
 			return
 		fi
-		if ! curl -L -c "$TEMP_DIR/cookie.txt" -b "$TEMP_DIR/cookie.txt" --connect-timeout 5 --retry 0 --fail -s -S "$@" "$ip" -o "$dlp"; then
-			epr "Request failed: $ip"
+		if ! curl -L -c "$TEMP_DIR/cookie.txt" -b "$TEMP_DIR/cookie.txt" --connect-timeout 5 --retry 0 --fail -s -S "$@" "$safe_ip" -o "$dlp"; then
+			epr "Request failed: $safe_ip"
 			return 1
 		fi
 		mv -f "$dlp" "$op"
