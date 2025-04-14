@@ -157,6 +157,8 @@ config_update() {
 	: >"$TEMP_DIR"/skipped
 	local upped=()
 	local prcfg=false
+	
+	# First, check for patch updates
 	for table_name in $(toml_get_table_names); do
 		if [ -z "$table_name" ]; then continue; fi
 		t=$(toml_get_table "$table_name")
@@ -190,6 +192,66 @@ config_update() {
 			fi
 		fi
 	done
+	
+	# Next, check for app updates
+	for table_name in $(toml_get_table_names); do
+		if [ -z "$table_name" ]; then continue; fi
+		t=$(toml_get_table "$table_name")
+		enabled=$(toml_get "$t" enabled) || enabled=true
+		if [ "$enabled" = false ]; then continue; fi
+		
+		# Skip if already marked for update by patches check
+		if [[ " ${upped[*]} " =~ " ${table_name} " ]]; then
+			continue
+		fi
+		
+		local version_mode=$(toml_get "$t" version) || version_mode="auto"
+		# Only check for latest versions if auto or latest is specified
+		if [[ "$version_mode" != "auto" && "$version_mode" != "latest" && "$version_mode" != "beta" ]]; then
+			continue
+		fi
+		
+		# Initialize download source
+		local dl_from=""
+		for dl_p in archive apkmirror uptodown; do
+			local dlurl=$(toml_get "$t" "${dl_p}-dlurl") || continue
+			dl_from=$dl_p
+			
+			# Get current app versions from source
+			pr "Checking for updates for ${table_name} from ${dl_p}"
+			if ! get_${dl_p}_resp "${dlurl}" || ! pkg_name=$(get_"${dl_p}"_pkg_name); then
+				continue
+			fi
+			
+			# Always set to false to exclude beta versions, unless explicitly requested
+			local __AAV__="false"
+			if [ "$version_mode" = "beta" ]; then
+				__AAV__="true"
+			fi
+			
+			local pkgvers=$(get_"${dl_from}"_vers)
+			local latest_version=$(get_highest_ver <<<"$pkgvers") || latest_version=$(head -1 <<<"$pkgvers")
+			
+			# Skip if this is a beta/alpha version (unless beta mode is enabled)
+			if [ "$__AAV__" = "false" ] && [[ "$latest_version" =~ [Bb]eta|[Aa]lpha ]]; then
+				pr "Skipping beta/alpha version: ${latest_version}"
+				echo "${table_name}: skipped beta version ${latest_version}" >>"$TEMP_DIR"/skipped
+				continue
+			fi
+			
+			# Check if this version is already built
+			if ! grep -q "^${table_name}: ${latest_version}$" build.md; then
+				pr "New version detected for ${table_name}: ${latest_version}"
+				prcfg=true
+				upped+=("$table_name")
+			else
+				echo "${table_name}: ${latest_version} (already built)" >>"$TEMP_DIR"/skipped
+			fi
+			
+			break
+		done
+	done
+	
 	if [ "$prcfg" = true ]; then
 		local query=""
 		for table in "${upped[@]}"; do
@@ -366,10 +428,12 @@ get_apkmirror_vers() {
 	vers=$(sed -n 's;.*Version:</span><span class="infoSlide-value">\(.*\) </span>.*;\1;p' <<<"$apkm_resp" | awk '{$1=$1}1')
 	if [ "$__AAV__" = false ]; then
 		local IFS=$'\n'
-		vers=$(grep -iv "\(beta\|alpha\)" <<<"$vers")
+		# More comprehensive filter for beta/alpha/preview/rc versions
+		vers=$(grep -iv "\(beta\|alpha\|preview\|rc\|dev\|test\)" <<<"$vers")
 		local v r_vers=()
 		for v in $vers; do
-			grep -iq "${v} \(beta\|alpha\)" <<<"$apkm_resp" || r_vers+=("$v")
+			# Also check for beta/alpha markers in the surrounding text
+			grep -iq "${v} \(beta\|alpha\|preview\|rc\|dev\|test\)" <<<"$apkm_resp" || r_vers+=("$v")
 		done
 		echo "${r_vers[*]}"
 	else
