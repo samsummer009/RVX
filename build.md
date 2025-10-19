@@ -1,8 +1,6 @@
 YouTube-Monet-RVX: 20.05.46  
 YouTube-Music-Monet-RVX (arm64-v8a): 8.30.54  
-YouTube-Music-Monet-RVX (arm-v7a): 8.30.54  
 YouTube-Music-RVX (arm64-v8a): 8.30.54  
-YouTube-Music-RVX (arm-v7a): 8.30.54  
 YouTube-RVX: 20.05.46  
 
 Install [ReVanced GmsCore](https://github.com/ReVanced/GmsCore/releases/latest) for non-root YouTube and YouTube Music APKs  
